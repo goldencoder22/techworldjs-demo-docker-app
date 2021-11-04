@@ -1,3 +1,5 @@
+def gv 
+
 pipeline{
     agent any
 
@@ -8,10 +10,19 @@ pipeline{
 
     stages {
 
+        stage('init') {
+            steps{
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+
         stage('build') {
             steps{
-                echo 'Building!!!'
-               // echo "Building version ${NEW_VERSION}"
+                script {
+                    gv.initBuild()
+                }
             }
         }
         
@@ -23,7 +34,9 @@ pipeline{
                 }
             }
             steps {
-                echo 'Testing!!!'
+                script {
+                    gv.initTest()
+                }
             }
         }
         
@@ -45,7 +58,9 @@ pipeline{
         
         stage('release') {
             steps{
-                echo 'Releasing!!!'
+                script {
+                    gv.initRelease()
+                }
             }
         }
     }
